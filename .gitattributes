@@ -1,0 +1,9 @@
+*.js binary
+*.json binary
+*.wasm binary
+*.dll binary
+*.blat binary
+*.dat binary
+*.css binary
+*.html binary
+*.csv binary
