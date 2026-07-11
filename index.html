@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DBV</title>
+    <base href="/DBV/" />
+    <link href="_framework/dotnet.ksf42jdnlg.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-DNkuj9QZ0VeMyY9+AIuv931Kdhi9czjOSO/QtKVPmi4=" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link href="manifest.webmanifest" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <script type="importmap">{
+  "imports": {
+    "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.958z1vx7fr.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.ksf42jdnlg.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.l8ed01zzxe.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.a6jcqbs390.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/blazor.webassembly.958z1vx7fr.js": "sha256-A59Tr9HqEhHMu8kU7kruLI9ayw5MRS6Lvc6z7jCbghk=",
+    "./_framework/blazor.webassembly.js": "sha256-A59Tr9HqEhHMu8kU7kruLI9ayw5MRS6Lvc6z7jCbghk=",
+    "./_framework/dotnet.js": "sha256-DNkuj9QZ0VeMyY9+AIuv931Kdhi9czjOSO/QtKVPmi4=",
+    "./_framework/dotnet.ksf42jdnlg.js": "sha256-DNkuj9QZ0VeMyY9+AIuv931Kdhi9czjOSO/QtKVPmi4=",
+    "./_framework/dotnet.native.js": "sha256-q+KALJnNpAv2vCS5ne57I/mcE3gTaN+imY3xBU6E56c=",
+    "./_framework/dotnet.native.l8ed01zzxe.js": "sha256-q+KALJnNpAv2vCS5ne57I/mcE3gTaN+imY3xBU6E56c=",
+    "./_framework/dotnet.runtime.a6jcqbs390.js": "sha256-7i3usfTrnzC/9qWO4si5Bw4w7D9fUSnSBdhQ47blX2M=",
+    "./_framework/dotnet.runtime.js": "sha256-7i3usfTrnzC/9qWO4si5Bw4w7D9fUSnSBdhQ47blX2M="
+  }
+}</script>
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="js/decode.js"></script>
+    <script src="_framework/blazor.webassembly.958z1vx7fr.js" autostart="false"></script>
+    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+    <script>
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (location.hostname === 'localhost' ||
+                    type === 'dotnetjs' ||
+                    !defaultUri.includes('_framework/')) {
+                    return defaultUri;
+                }
+
+                let contentType = '';
+                if (type === 'dotnetwasm') {
+                    contentType = 'application/wasm';
+                } else {
+                    contentType = 'application/octet-stream';
+                }
+
+                const baseUrl = defaultUri.substring(0, defaultUri.indexOf('_framework/'));
+                const brUrl = `${baseUrl}_framework/${name}.br`;
+
+                return fetch(brUrl, { cache: 'no-cache' })
+                    .then(async file => {
+                        if (!file.ok) {
+                            return fetch(defaultUri);
+                        }
+                        const arrayBuffer = await file.arrayBuffer();
+                        const dehydrated = BrotliDecode(new Uint8Array(arrayBuffer));
+
+                        return new Response(dehydrated, {
+                            headers: { 'content-type': contentType },
+                            status: 200,
+                            statusText: 'OK'
+                        });
+                    })
+                    .catch(() => {
+                        return fetch(defaultUri);
+                    });
+            }
+        });
+
+    </script>
+</body>
+
+</html>
